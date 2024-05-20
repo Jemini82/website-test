@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .calculator input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-align: right;
+        }
+        .calculator button {
+            width: 23%;
+            padding: 10px;
+            margin: 1%;
+            font-size: 18px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .calculator button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <br>
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button onclick="setOperation('+')">+</button>
+        <br>
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button onclick="setOperation('-')">-</button>
+        <br>
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button onclick="setOperation('*')">*</button>
+        <br>
+        <button onclick="appendNumber('0')">0</button>
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="setOperation('/')">/</button>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentOperand = '';
+        let previousOperand = '';
+        let operation = null;
+
+        function appendNumber(number) {
+            if (display.value === '0' || display.value === 'Error') {
+                display.value = number;
+            } else {
+                display.value += number;
+            }
+        }
+
+        function clearDisplay() {
+            display.value = '';
+            currentOperand = '';
+            previousOperand = '';
+            operation = null;
+        }
+
+        function setOperation(op) {
+            if (display.value === '' || display.value === 'Error') return;
+            if (currentOperand !== '') {
+                calculate();
+            }
+            operation = op;
+            previousOperand = display.value;
+            display.value = '';
+        }
+
+        function calculate() {
+            if (operation === null || display.value === '' || previousOperand === '') return;
+            currentOperand = display.value;
+            let result;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
+            if (isNaN(prev) || isNaN(current)) {
+                display.value = 'Error';
+                return;
+            }
+            switch (operation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            display.value = result;
+            currentOperand = result;
+            operation = null;
+        }
+    </script>
+</body>
+</html>
